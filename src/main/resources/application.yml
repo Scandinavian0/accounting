@@ -1,0 +1,91 @@
+#框架全局配置
+global:
+  log:
+    # 开启日志aop切面
+    enabled: true
+    # aop日志打印
+    log-print: true
+    # aop日志持久化
+    log-save:
+      enabled: false
+      #日志线程数量
+      threads: 1
+  # 是否开启应用层限流
+  rate-limit: false
+  # 忽略鉴权url
+  ignored:
+    urls:
+      - /login
+      - /wx/*
+      - /logoutSuccess
+      - /expired
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /image/**
+      - /testCode/generate
+      - /checkCode
+      - /testCode/generate
+      - /checkCode
+      - /scale/**
+      - /consultant/**
+      - /training/**
+      - /test/**
+      - /tester/**
+      - /training/**
+
+server:
+  port: 9000
+  servlet:
+    context-path: /
+    session:
+      timeout: 7200
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 800
+    min-spare-threads: 30
+
+
+
+spring:
+  profiles:
+    active: dev
+    # 检查终端是否支持ANSI，是的话就采用彩色输出
+    # NEVER：禁用ANSI-colored输出
+    # DETECT：会检查终端是否支持ANSI，是的话就采用彩色输出
+    # ALWAYS：总是使用ANSI-colored格式输出，若终端不支持的时候，会有很多干扰信息
+  output:
+    ansi:
+      enabled: DETECT
+  #Activiti property configuration
+  activiti:
+    check-process-definitions: false
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 10MB
+
+
+# Mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml,classpath:/mapperFlow/*Mapper.xml
+#  type-aliases-package: com.smac.modules.vo,com.smac.workflow.vo
+  type-aliases-package: com.everglow.accouting.data
+  global-config:
+    banner: false
+    db-config:
+      id-type: AUTO
+      tableUnderline: true
+      # 字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断",NOT_EMPTY:"非空判断"
+      field-strategy: NOT_NULL
+  configuration:
+    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.EnumTypeHandler
+    map-underscore-to-camel-case: true
+    # 全局地开启或关闭配置文件中的所有映射器已经配置的任何缓存
+    cache-enabled: false
+    # 配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: 'null'
+
+
+
