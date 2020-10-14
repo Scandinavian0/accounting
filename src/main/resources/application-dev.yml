@@ -4,9 +4,9 @@ spring:
     #    username: root
     #    password: 123456
 #    url: jdbc:p6spy:mysql://211.149.238.91:3306/psysys?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-    url: jdbc:p6spy:mysql://211.149.238.91:3306/psysys?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-    username: psysys
-    password: XGhbt5dGJKWYrcxe
+    url: jdbc:p6spy:mysql://45.205.1.240:3306/accounting?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: Everglow@2020
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     hikari:
