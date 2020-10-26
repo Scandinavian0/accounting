@@ -15,25 +15,7 @@ global:
   # 忽略鉴权url
   ignored:
     urls:
-      - /login
-      - /wx/*
-      - /logoutSuccess
-      - /expired
-      - /**/*.js
-      - /**/*.css
-      - /**/*.png
-      - /**/*.ico
-      - /image/**
-      - /testCode/generate
-      - /checkCode
-      - /testCode/generate
-      - /checkCode
-      - /scale/**
-      - /consultant/**
-      - /training/**
-      - /test/**
-      - /tester/**
-      - /training/**
+
 
 server:
   port: 9000
@@ -69,9 +51,9 @@ spring:
 
 # Mybatis-plus
 mybatis-plus:
-  mapper-locations: classpath:/mapper/*Mapper.xml,classpath:/mapperFlow/*Mapper.xml
+  mapper-locations: classpath:/mapper/*Mapper.xml
 #  type-aliases-package: com.smac.modules.vo,com.smac.workflow.vo
-  type-aliases-package: com.everglow.accouting.data
+  type-aliases-package: com.everglow.accouting.modules.entity
   global-config:
     banner: false
     db-config:
@@ -80,7 +62,7 @@ mybatis-plus:
       # 字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断",NOT_EMPTY:"非空判断"
       field-strategy: NOT_NULL
   configuration:
-    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.EnumTypeHandler
+    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler
     map-underscore-to-camel-case: true
     # 全局地开启或关闭配置文件中的所有映射器已经配置的任何缓存
     cache-enabled: false
