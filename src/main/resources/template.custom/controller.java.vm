@@ -1,0 +1,207 @@
+package ${package.Controller};
+#if(${global.isDetail})
+import cn.hutool.core.util.ObjectUtil;
+#end
+#if(${global.isExportExcel})
+import com.smac.common.utils.ExcelUtils;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
+#end
+#if(${global.isStatusChange})
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+#end
+#if(${global.isPage})
+import com.smac.common.vo.PageBind;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+#end
+#if(${global.isPage} || ${global.isExportExcel})
+import com.smac.common.utils.RequestUtls;
+import javax.servlet.http.HttpServletRequest;
+#end
+#if(${global.isStatusChange} || ${global.isUnique})
+import com.smac.data.entity.${entity};
+#end
+#if(${global.isUnique})
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+#end
+#if(${global.isAddOrUpdate} || ${global.isDetail})
+import com.smac.modules.vo.${entity}DetailVo;
+#end
+#if(${global.isAddOrUpdate})
+import org.springframework.http.MediaType;
+#end
+#if(${global.isDelete})
+import java.util.Arrays;
+#end
+#if(${global.isSelectList})
+import java.util.stream.Collectors;
+#end
+import ;
+##import com.smac.common.utils.R;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
+import javax.annotation.Resource;
+import com.smac.modules.service.I${entity}Service;
+import com.smac.data.service.I${entity}BaseService;
+#if(${global.isSelectList})
+import com.smac.common.vo.Label;
+#end
+import com.smac.common.annotation.Log;
+import com.smac.common.enums.ActionEnum;
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Api(tags = {"${entity}"}, description = "$!{table.comment}")
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("/${table.entityPath}")
+public class ${table.controllerName}{
+
+    /**
+     * 模块名称
+     */
+    private static final String MODEL = "$!{table.comment}|${table.entityPath}";
+
+    @Resource
+    private ${table.serviceName} i${table.entityPath}Service;
+
+    @Resource
+    private I${entity}BaseService ${table.entityPath}BaseService;
+
+    #if(${global.isPage})
+
+	@Log(model = MODEL,action = ActionEnum.VIEW)
+	@ApiOperationSupport(ignoreParameters = {"page.current", "page.records", "page.size", "page.searchCount","page.total"})
+    @ApiOperation("$!{table.comment}分页查询")
+    @GetMapping("/search")
+    public Result search(@ModelAttribute PageBind page, HttpServletRequest req) throws Exception {
+    	return R.genOkResult(i${table.entityPath}Service.page(page.getPage(), RequestUtls.getParamMap(req)));
+    }
+    #end
+
+    #if(${global.isDetail})
+
+    @ApiOperation("$!{table.comment}详情")
+    @GetMapping("/{id}")
+    public Result get(@PathVariable("id") String id) throws Exception {
+        ${entity}DetailVo ${table.entityPath}Vo = i${table.entityPath}Service.get(id);
+    	return ObjectUtil.isNull(${table.entityPath}Vo) ? R.genFailedResult("获取详情失败") : R.genOkResult(${table.entityPath}Vo);
+    }
+    #end
+
+    #if(${global.isAddOrUpdate})
+
+	@Log(model = MODEL,action = ActionEnum.ADD_UPDATE)
+    @ApiOperation("$!{table.comment}创建/修改")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result addOrUpdate(@ModelAttribute ${entity}DetailVo ${table.entityPath}DetailVo) throws Exception {
+    	try {
+            i${table.entityPath}Service.addOrUpdate(${table.entityPath}DetailVo);
+    	} catch (Exception e) {
+			e.printStackTrace();
+            return R.genFailedResult(e.getMessage());
+    	}
+    	return R.genOkResult();
+    }
+    #end
+
+    #if(${global.isDelete})
+
+	@Log(model = MODEL,action = ActionEnum.DELETE_BATCH)
+    @ApiOperation("$!{table.comment}删除")
+    @DeleteMapping("/{ids}")
+    public Result delete(@PathVariable("ids") String ids) {
+    	try {
+            ${table.entityPath}BaseService.removeByIds(Arrays.asList(ids.split(",")));
+    	} catch (Exception e) {
+		    e.printStackTrace();
+            return R.genFailedResult(e.getMessage());
+    	}
+    	return R.genOkResult();
+    }
+    #end
+
+    #if(${global.isStatusChange})
+
+    @ApiOperation("$!{table.comment}状态更新")
+    @PutMapping("/{id}/{type}/{value}")
+    public Result put(@PathVariable("id") String id, @PathVariable("type") Integer type,
+    @PathVariable("value") Integer value) {
+    	try {
+            switch (type) {
+                case 1:
+                        ${table.entityPath}BaseService.update(new UpdateWrapper<${entity}>().eq("id", id).set("status", value));
+                    break;
+                case 2:
+                    break;
+                default:
+            }
+    	} catch (Exception e) {
+		    e.printStackTrace();
+            return R.genFailedResult(e.getMessage());
+    	}
+    	return R.genOkResult();
+    }
+    #end
+
+    #if(${global.isSelectList})
+
+    @ApiOperation("$!{table.comment}下拉列表")
+	@GetMapping("/list")
+	public Result list() throws Exception {
+		return R.genOkResult(${table.entityPath}BaseService.list().stream().map(entity -> {
+			return new Label().setLabel(entity.getName()).setValue(entity.getId());
+		}).collect(Collectors.toList()));
+	}
+    #end
+
+    #if(${global.isUnique})
+
+    @ApiOperation("校验$!{table.comment}名称是否重复")
+	@GetMapping("/check/{name}")
+	public Result check(@PathVariable("name") String name) {
+		try {
+            ${entity} ${table.entityPath} = ${table.entityPath}BaseService.getOne(new QueryWrapper<${entity}>().eq("name", name));
+			return R.genOkResult(${table.entityPath} != null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return R.genFailedResult(e.getMessage());
+		}
+	}
+    #end
+
+    #if(${global.isExportExcel})
+
+	@Log(model = MODEL,action = ActionEnum.EXCEL_EXPORT)
+    @ApiOperation("$!{table.comment}导出")
+    @GetMapping("/export")
+    public void export(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        List<Map> rows = i${table.entityPath}Service.list(RequestUtls.getParamMap(req));
+        ExcelWriter writer = ExcelUtil.getWriter();
+        // TODO 填写需要导出的字段和列名称
+#set ($i=1)
+#foreach($field in ${table.fields})
+#if($i != 1)
+		writer.addHeaderAlias("${field.propertyName}", "${field.comment}");
+#end
+#set($i=$i+1)
+#end
+        writer.write(rows);
+        ExcelUtils.doExport(writer, resp, "${table.entityPath}");
+    }
+#end
+
+}

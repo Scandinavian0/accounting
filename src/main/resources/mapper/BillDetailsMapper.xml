@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everglow.accounting.modules.mapper.BillDetailsBaseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.everglow.accounting.modules.entity.BillDetails">
+        <result column="id" property="id" />
+        <result column="unit_id" property="unitId" />
+        <result column="unit_number" property="unitNumber" />
+        <result column="bill_details" property="billDetails" />
+        <result column="total" property="total" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        unit_id, unit_number, bill_details, total, create_time, update_time
+    </sql>
+
+</mapper>

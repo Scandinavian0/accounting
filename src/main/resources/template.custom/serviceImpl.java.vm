@@ -1,0 +1,91 @@
+package ${package.ServiceImpl};
+
+import com.smac.data.entity.${entity};
+import com.smac.data.service.I${entity}BaseService;
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+#if(${global.isPage})
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
+#if(${global.isAddOrUpdate} || ${global.isDetail})
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import com.smac.modules.vo.${entity}DetailVo;
+#end
+#if(${global.isPage} || ${global.isExportExcel})
+import com.smac.modules.vo.${entity}Vo;
+import java.util.Map;
+#end
+#if(${global.isExportExcel})
+import java.util.List;
+#end
+
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName}  implements ${table.serviceName} {
+
+
+    @Resource
+    private I${entity}BaseService ${table.entityPath}BaseService;
+    @Resource
+    private ${entity}Mapper ${table.entityPath}Mapper;
+
+
+    #if(${global.isPage})
+
+    @Override
+    public IPage<${entity}Vo> page(Page page, Map<String, Object> params) {
+        return ${table.entityPath}Mapper.page(page, params);
+    }
+    #end
+
+    #if(${global.isExportExcel})
+
+    @Override
+    public List<Map> list(Map<String, Object> params) {
+        return ${table.entityPath}Mapper.list(params);
+    }
+    #end
+
+    #if(${global.isDetail})
+
+    @Override
+    public ${entity}DetailVo get(String id) {
+        ${entity}DetailVo ${table.entityPath}DetailVo = new ${entity}DetailVo();
+        ${entity} ${table.entityPath} = ${table.entityPath}BaseService.getById(id);
+        BeanUtil.copyProperties(${table.entityPath}, ${table.entityPath}DetailVo, CopyOptions.create().setIgnoreError(true));
+        // TODO
+        return ${table.entityPath}DetailVo;
+    }
+    #end
+
+    #if(${global.isAddOrUpdate})
+
+    @Override
+    public void addOrUpdate(${entity}DetailVo ${table.entityPath}DetailVo) {
+        ${entity} ${table.entityPath} = new ${entity}();
+        BeanUtil.copyProperties(${table.entityPath}DetailVo, ${table.entityPath}, CopyOptions.create().setIgnoreError(true));
+        // TODO
+        ${table.entityPath}BaseService.saveOrUpdate(${table.entityPath});
+    }
+    #end
+
+}
+
+#end

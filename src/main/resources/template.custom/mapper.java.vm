@@ -1,0 +1,58 @@
+package ${package.Mapper};
+
+#if(${global.isPage})
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import java.util.List;
+#if(${global.isPage} || ${global.isExportExcel})
+import com.smac.modules.vo.${entity}Vo;
+import org.apache.ibatis.annotations.Param;
+import java.util.Map;
+#end
+/**
+ * <p>
+ * $!{table.comment} Mapper 接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${kotlin})
+interface ${table.mapperName} : ${superMapperClass}<${entity}>
+#else
+public interface ${table.mapperName} {
+
+    #if(${global.isPage})
+
+    /**
+     *  分页查询
+     */
+    IPage<${entity}Vo> page(Page<${entity}Vo> page,@Param("params")  Map<String, Object> params);
+    #end
+    #if(${global.isExportExcel})
+
+	/**
+     *  查询
+     */
+	List<Map> list(@Param("params")  Map<String, Object> params);
+    #end
+
+    #if(${table.mapperName} == "UserMapper")
+
+	/**
+     *  根据用户id获取权限
+     */
+	@Select("SELECT sr.identification FROM sys_resources sr "
+			+ "LEFT JOIN tran_role_resources trr ON trr.resources_id = sr.id "
+			+" LEFT JOIN tran_user_role tur ON trr.role_id = tur.role_id"
+			+ "where and tur.user_id = #{userId}"
+	)
+	List<String> getResourcesByUserId(@Param("userId") String userId);
+    #end
+
+
+}
+#end

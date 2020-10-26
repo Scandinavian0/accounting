@@ -1,5 +1,7 @@
-package com.everglow.accounting.generator;
+package generator;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -39,18 +41,62 @@ public class CodeGenerator {
         AutoGenerator mpg = new AutoGenerator();
 
         // 全局配置
-        GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setAuthor("jobob");
-        gc.setOpen(false);
+        GlobalConfig gc = new GlobalConfig()
+                //是否覆盖
+                .setFileOverride(true)
+                //创建路径
+                .setOutputDir(projectPath + "/src/main/java")
+                //作者
+                .setAuthor("Everglow")
+                //是否开启swagger
+                .setSwagger2(true)
+                //是否打开输出目录
+                .setOpen(false)
+                //是否开启activeRecord模式
+                .setActiveRecord(false)
+                //是否开启BaseResultMap
+                .setBaseResultMap(true)
+                //是否开启baseColumnList
+                .setBaseColumnList(true);
+//        gc.setFileOverride()
+        //输出目录
+//				.setOutputDir(outPath)
+//                // 是否覆盖文件
+//                .setFileOverride(config.getIsOverride())
+//                //是否打开输出目录
+//                .setOpen(false)
+//                // 是否在xml中添加二级缓存配置
+//                .setEnableCache(false)
+//                // 开发人员
+//                .setAuthor("ljz")
+//                // 是否开启 Kotlin 模式
+//                .setKotlin(false)
+//                // 是否开启 swagger2 模式
+//                .setSwagger2(true)
+//                // 是否开启 activeRecord 模式
+//                .setActiveRecord(false)
+//                // 是否开启 BaseResultMap
+//                .setBaseResultMap(true)
+//                // 是否开启 baseColumnList
+//                .setBaseColumnList(true)
+//                // 文件命名方式
+//                .setEntityName("%s")
+//                .setMapperName("%s"+extra+"Mapper")
+//                .setXmlName("%s"+extra+"Mapper")
+//                .setServiceName("I%s"+extra+"Service")
+//                .setServiceImplName("%s"+extra+"ServiceImpl")
+//                .setControllerName("%s"+extra+"Controller")
+                //设置主键策略
+        gc.setIdType(IdType.AUTO);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:p6spy:mysql://45.205.1.240:3306/accounting?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true");
+        dsc.setUrl("jdbc:mysql://45.205.1.240:3306/accounting?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false");
         // dsc.setSchemaName("public");
+        dsc.setDbType(DbType.MYSQL);
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("Everglow@2020");
@@ -59,7 +105,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.baomidou.ant");
+        pc.setParent("com.everglow");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -106,6 +152,11 @@ public class CodeGenerator {
 
         // 配置模板
         TemplateConfig templateConfig = new TemplateConfig();
+//                .setController("template/custom/controller.java.vm")
+//                .setEntity("template/custom/entity.java.vm")
+//                .setMapper("template/custom/mapper.java.vm")
+//                .setService("template/custom/service.java.vm").setXml(null)
+//                .setServiceImpl("template/custom/serviceImpl.java.vm");;
 
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
@@ -120,11 +171,12 @@ public class CodeGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
+//        strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
+        strategy.setEntitySerialVersionUID(true);
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         // 公共父类
-        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
+//        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
@@ -133,5 +185,11 @@ public class CodeGenerator {
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
+    }
+
+    private GlobalConfig globalConfig(){
+        String extra="";
+
+        return new GlobalConfig();
     }
 }
