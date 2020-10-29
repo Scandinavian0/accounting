@@ -1,14 +1,17 @@
 package ${package.Mapper};
 
-#if(${global.isPage})
+###if(${global.isPage})
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-#end
+###end
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import java.util.List;
+import java.util.Map;
+import com.everglow.accounting.modules.entity.${entity};
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 #if(${global.isPage} || ${global.isExportExcel})
-import com.smac.modules.vo.${entity}Vo;
+##import com.smac.modules.vo.${entity}Vo;
 import org.apache.ibatis.annotations.Param;
 import java.util.Map;
 #end
@@ -23,15 +26,15 @@ import java.util.Map;
 #if(${kotlin})
 interface ${table.mapperName} : ${superMapperClass}<${entity}>
 #else
-public interface ${table.mapperName} {
-
-    #if(${global.isPage})
+public interface ${table.mapperName} extends BaseMapper<${entity}>{
+##interface ${table.mapperName} : ${superMapperClass}<${entity}>{
+##    #if(${global.isPage})
 
     /**
      *  分页查询
      */
-    IPage<${entity}Vo> page(Page<${entity}Vo> page,@Param("params")  Map<String, Object> params);
-    #end
+    IPage<${entity}> page(Page<${entity}> page,@Param("params")  Map<String, Object> params);
+##    #end
     #if(${global.isExportExcel})
 
 	/**

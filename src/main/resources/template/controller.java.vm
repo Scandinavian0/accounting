@@ -3,7 +3,7 @@ package ${package.Controller};
 import cn.hutool.core.util.ObjectUtil;
 #end
 #if(${global.isExportExcel})
-import com.smac.common.utils.ExcelUtils;
+##import com.smac.common.utils.ExcelUtils;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import javax.servlet.http.HttpServletResponse;
@@ -14,11 +14,11 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 #end
 #if(${global.isPage})
-import com.smac.common.vo.PageBind;
+##import com.smac.common.vo.PageBind;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 #end
 #if(${global.isPage} || ${global.isExportExcel})
-import com.smac.common.utils.RequestUtls;
+##import com.common.utils.RequestUtls;
 import javax.servlet.http.HttpServletRequest;
 #end
 #if(${global.isStatusChange} || ${global.isUnique})
@@ -28,7 +28,7 @@ import com.smac.data.entity.${entity};
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 #end
 #if(${global.isAddOrUpdate} || ${global.isDetail})
-import com.smac.modules.vo.${entity}DetailVo;
+##import com.smac.modules.vo.${entity}DetailVo;
 #end
 #if(${global.isAddOrUpdate})
 import org.springframework.http.MediaType;
@@ -39,19 +39,18 @@ import java.util.Arrays;
 #if(${global.isSelectList})
 import java.util.stream.Collectors;
 #end
-import ;
 ##import com.smac.common.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import com.smac.modules.service.I${entity}Service;
-import com.smac.data.service.I${entity}BaseService;
-#if(${global.isSelectList})
-import com.smac.common.vo.Label;
-#end
-import com.smac.common.annotation.Log;
-import com.smac.common.enums.ActionEnum;
+##import com.everglow.accounting.modules.service.I${entity}Service;
+import com.everglow.accounting.modules.service.I${entity}BaseService;
+###if(${global.isSelectList})
+##import com.smac.common.vo.Label;
+###end
+##import com.smac.common.annotation.Log;
+##import com.smac.common.enums.ActionEnum;
 
 /**
  * <p>

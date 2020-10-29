@@ -1,11 +1,12 @@
 package com.everglow.accounting.modules.entity;
-
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -13,10 +14,12 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Everglow
- * @since 2020-10-22
+ * @since 2020-10-29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("amout")
 @ApiModel(value="Amout对象", description="总计表")
 public class Amout implements Serializable {
 
